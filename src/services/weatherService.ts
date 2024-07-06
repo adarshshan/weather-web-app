@@ -1,13 +1,30 @@
+import { DateTime } from "luxon";
 
+export const getWeatherData = (infotype: string, searchParams: any): Promise<any> => {
+    // const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchParams.q}&appid=${process.env.REACT_APP_API_KEY!}`;
+    // console.log(url);
+    const url: any = new URL(`https://api.openweathermap.org/data/2.5/weather?q=${searchParams.q}`);
+    url.search = new URLSearchParams({ ...searchParams, appid: process.env.REACT_APP_API_KEY! });
 
-
-export const getWeatherData = (infotype: string, searchParams: any) => {
-    console.log(process.env.REACT_APP_API_KEY);
-    const url: any = new URL(process.env.REACT_APP_BASE_URL! + '/' + infotype)
-    url.search = new URLSearchParams({ ...searchParams, appid: process.env.REACT_APP_API_KEY });
-    return fetch(url).then((res) => res.json()).then((data) => data);
+    return fetch(url.toString())
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok ' + res.statusText);
+            }
+            return res.json().then((data) => data);
+        })
+        .catch((error) => {
+            console.error('There has been a problem with your fetch operation:', error);
+            throw error;
+        });
 }
+
+const formatToLocalTime = (secs: number, zone: string, format = "cccc, dd LLL yyyy' | Local time: 'hh:mm a") =>
+    DateTime.fromSeconds(secs).setZone(zone).toFormat(format);
+const iconUrlFromCode = (code: string) => `http://openweathermap.org/img/wn/${code}@2x.png`;
+
 const formatCurrentWeather = (data: any) => {
+    console.log(data); console.log('this issssss')
     const {
         coord: { lat, lon },
         main: { temp, feels_like, temp_min, temp_max, humidity },
@@ -16,9 +33,11 @@ const formatCurrentWeather = (data: any) => {
         sys: { country, sunrise, sunset },
         weather,
         wind: { speed },
+        timezone
     } = data;
 
     const { main: details, icon } = weather[0];
+    const formatedLocalTime = formatToLocalTime(dt, timezone);
 
     return {
         lat,
@@ -30,67 +49,52 @@ const formatCurrentWeather = (data: any) => {
         humidity,
         name,
         dt,
+        timezone,
         country,
-        sunrise,
-        sunset,
+        sunrise: formatToLocalTime(sunrise, timezone, 'hh:mm:a'),
+        sunset: formatToLocalTime(sunset, timezone, 'hh:mm:a'),
         details,
-        icon,
+        icon: iconUrlFromCode(icon),
         speed,
+        formatedLocalTime
     };
 };
 
-const formatForecastWeather = (data: any) => {
-    let { timezone, daily, hourly } = data;
-    daily = daily.slice(1, 6).map((d: any) => {
-        return {
-            title: formatToLocalTime(d.dt, timezone, "ccc"),
-            temp: d.temp.day,
-            icon: d.weather[0].icon,
-        };
-    });
+const formatForecastWeather = (secs: any, offset: any, data: any) => {
+    console.log(data); console.log('this is the dataaaa')
 
-    hourly = hourly.slice(1, 6).map((d: any) => {
-        return {
-            title: formatToLocalTime(d.dt, timezone, "hh:mm a"),
-            temp: d.temp,
-            icon: d.weather[0].icon,
-        };
-    });
+    const daily = {
+        title: formatToLocalTime(data.dt, offset, "ccc"),
+        temp: data.main.temp,
+        icon: iconUrlFromCode(data.weather[0].icon),
+    }
 
-    return { timezone, daily, hourly };
+    const hourly = {
+        title: formatToLocalTime(data.dt, offset, "hh:mm a"),
+        temp: data.main.temp,
+        icon: iconUrlFromCode(data.weather[0].icon),
+        data: data.dt.txt,
+    }
+
+    return { hourly,daily };
 };
 
 const getFormattedWeatherData = async (searchParams: any) => {
-    const formattedCurrentWeather = await getWeatherData(
-        "weather",
-        searchParams
-    ).then(formatCurrentWeather);
+    const formattedCurrentWeather = await getWeatherData("weather", searchParams).then(formatCurrentWeather);
+    console.log(formattedCurrentWeather); console.log('from here');
 
-    const { lat, lon } = formattedCurrentWeather;
+    const { dt, lat, lon, timezone } = formattedCurrentWeather;
 
-    const formattedForecastWeather = await getWeatherData("onecall", {
+    const formatedForcastedWeather = await getWeatherData("forecast", {
         lat,
         lon,
-        exclude: "current,minutely,alerts",
         units: searchParams.units,
-    }).then(formatForecastWeather);
+    }).then((d) => formatForecastWeather(dt, timezone, d))
 
-    return { ...formattedCurrentWeather, ...formattedForecastWeather };
+
+    return { ...formattedCurrentWeather, ...formatedForcastedWeather };
 };
 
-// const formatToLocalTime = (
-//     secs:any,
-//     zone:any,
-//     format = "cccc, dd LLL yyyy' | Local time: 'hh:mm a"
-// ) => DateTime.fromSeconds(secs).setZone(zone).toFormat(format)
-const formatToLocalTime = (
-    secs: any,
-    zone: any,
-    format = "cccc, dd LLL yyyy' | Local time: 'hh:mm a"
-) => '23/02/2000 23:11'
-
-const iconUrlFromCode = (code: any) =>
-    `http://openweathermap.org/img/wn/${code}@2x.png`;
 
 
 export default getFormattedWeatherData;

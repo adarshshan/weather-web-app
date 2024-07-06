@@ -4,12 +4,15 @@ import TopButtons from './components/TopButtons';
 import Inputs from './components/Inputs';
 import TimeAndLocation from './components/TimeAndLocation';
 import TemperatureAndDetails from './components/TemperatureAndDetails';
-import { getWeatherData } from './services/weatherService';
+import getFormattedWeatherData, { getWeatherData } from './services/weatherService';
+import Forcast from './components/Forcast';
 
 function App() {
   const fetchWeather = async () => {
-    const data = await getWeatherData('weather', { q: 'london' });
-    console.log(data);
+    const data = await getFormattedWeatherData({ q: 'france', units: 'Celsius' });
+    // const b=await getWeatherData('weather',{q:'tokyo'});console.log(b);
+    console.log('final');
+    console.log(data)
   }
   fetchWeather();
   return (
@@ -18,6 +21,9 @@ function App() {
       <Inputs />
       <TimeAndLocation />
       <TemperatureAndDetails />
+      <Forcast />
+      <Forcast />
+      <Forcast />
     </div>
   );
 }
