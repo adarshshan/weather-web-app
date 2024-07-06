@@ -13,7 +13,7 @@ const Inputs: React.FC<IInputs> = ({ setUnits, setQuery }) => {
 
     }
     const handleSearchClick = () => {
-        if (city !== '') setQuery(city);
+        if (city !== '') setQuery({ q: city });
     }
     const handleLocationClick = () => {
         if (navigator.geolocation) {
@@ -49,7 +49,7 @@ const Inputs: React.FC<IInputs> = ({ setUnits, setQuery }) => {
                 <button
                     name="metric"
                     className="text-xl text-white font-light transition ease-out hover:scale-125"
-                    onClick={handleUnitsChange}
+                    onClick={() => setUnits("metric")}
                 >
                     °C
                 </button>
@@ -57,7 +57,7 @@ const Inputs: React.FC<IInputs> = ({ setUnits, setQuery }) => {
                 <button
                     name="imperial"
                     className="text-xl text-white font-light transition ease-out hover:scale-125"
-                    onClick={handleUnitsChange}
+                    onClick={() => setUnits("imperial")}
                 >
                     °F
                 </button>

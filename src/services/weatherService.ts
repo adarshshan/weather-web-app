@@ -1,8 +1,6 @@
 import { DateTime } from "luxon";
 
 export const getWeatherData = (infotype: string, searchParams: any): Promise<any> => {
-    // const url = `https://api.openweathermap.org/data/2.5/weather?q=${searchParams.q}&appid=${process.env.REACT_APP_API_KEY!}`;
-    // console.log(url);
     const url: any = new URL(`https://api.openweathermap.org/data/2.5/weather?q=${searchParams.q}`);
     url.search = new URLSearchParams({ ...searchParams, appid: process.env.REACT_APP_API_KEY! });
 
