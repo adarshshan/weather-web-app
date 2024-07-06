@@ -3,17 +3,26 @@ import { IoIosSearch } from "react-icons/io";
 import { IoLocation } from "react-icons/io5";
 
 interface IInputs {
+    setUnits: React.Dispatch<React.SetStateAction<string>>;
+    setQuery: React.Dispatch<React.SetStateAction<any>>;
 
 }
-const Inputs: React.FC<IInputs> = () => {
+const Inputs: React.FC<IInputs> = ({ setUnits, setQuery }) => {
     const [city, setCity] = useState("");
     const handleUnitsChange = () => {
 
     }
     const handleSearchClick = () => {
-
+        if (city !== '') setQuery(city);
     }
-    const handleLocationClick = () => { }
+    const handleLocationClick = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const { latitude, longitude } = position.coords
+                setQuery({ lat: latitude, lon: longitude })
+            })
+        }
+    }
     return (
         <div className="flex flex-row justify-center my-6">
             <div className="flex flex-row w-3/4 items-center justify-center space-x-4">
@@ -29,7 +38,7 @@ const Inputs: React.FC<IInputs> = () => {
                     className="text-white cursor-pointer transition ease-out hover:scale-125"
                     onClick={handleSearchClick}
                 />
-                <IoLocation 
+                <IoLocation
                     size={25}
                     className="text-white cursor-pointer transition ease-out hover:scale-125"
                     onClick={handleLocationClick}

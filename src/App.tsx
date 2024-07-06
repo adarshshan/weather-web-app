@@ -8,12 +8,12 @@ import getFormattedWeatherData, { getWeatherData } from './services/weatherServi
 import Forcast from './components/Forcast';
 
 function App() {
-  const [query, setQuery] = useState("Paris");
+  const [query, setQuery] = useState<any>({ q: "Paris" });
   const [units, setUnits] = useState("metric");
   const [weather, setWeather] = useState<any>(null);
 
   const fetchWeather = async () => {
-    await getFormattedWeatherData({ q: query, units: units }).then((data) => {
+    await getFormattedWeatherData({ ...query, units }).then((data) => {
       setWeather(data);
     })
   }
@@ -30,7 +30,7 @@ function App() {
   return (
     <div className={`mx-auto max-w-screen-md mt-4 py-5 px-32 bg-gradient-to-br h-fit shadow-xl shadow-gray-400 ${formatBackground()}`}>
       <TopButtons setQuery={setQuery} />
-      <Inputs />
+      <Inputs setQuery={setQuery} setUnits={setUnits} />
       {weather && (
         <>
           <TimeAndLocation weather={weather} />
