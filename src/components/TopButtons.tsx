@@ -1,7 +1,7 @@
 import React from "react";
 
 interface ITopButtons {
-    setQuery?: any;
+    setQuery: React.Dispatch<React.SetStateAction<string>>;
 }
 const TopButtons: React.FC<ITopButtons> = ({ setQuery }) => {
     const cities = [
@@ -33,7 +33,7 @@ const TopButtons: React.FC<ITopButtons> = ({ setQuery }) => {
                 <button
                     key={city.id}
                     className="text-white text-lg font-medium"
-                    onClick={() => setQuery({ q: city.title })} >
+                    onClick={() => setQuery(city.title)} >
                     {city.title}
                 </button>
             ))}

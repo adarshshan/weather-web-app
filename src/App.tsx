@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import TopButtons from './components/TopButtons';
 import Inputs from './components/Inputs';
@@ -8,22 +8,31 @@ import getFormattedWeatherData, { getWeatherData } from './services/weatherServi
 import Forcast from './components/Forcast';
 
 function App() {
+  const [query, setQuery] = useState("Paris");
+  const [units, setUnits] = useState("metric");
+  const [weather, setWeather] = useState<any>(null);
+
   const fetchWeather = async () => {
-    const data = await getFormattedWeatherData({ q: 'france', units: 'Celsius' });
-    // const b=await getWeatherData('weather',{q:'tokyo'});console.log(b);
-    console.log('final');
-    console.log(data)
+    await getFormattedWeatherData({ q: query, units: units }).then((data) => {
+      setWeather(data);
+    })
   }
-  fetchWeather();
+  useEffect(() => {
+    fetchWeather()
+  }, [query, units])
+  console.log(weather); console.log('this is the weather data')
   return (
     <div className="mx-auto max-w-screen-md mt-4 py-5 px-32 bg-gradient-to-br bg-blue-500  h-fit shadow-xl shadow-gray-400">
-      <TopButtons />
+      <TopButtons setQuery={setQuery} />
       <Inputs />
-      <TimeAndLocation />
-      <TemperatureAndDetails />
-      <Forcast />
-      <Forcast />
-      <Forcast />
+      {weather && (
+        <>
+          <TimeAndLocation weather={weather} />
+          <TemperatureAndDetails weather={weather} />
+          <Forcast weather={weather} />
+        </>
+      )}
+
     </div>
   );
 }

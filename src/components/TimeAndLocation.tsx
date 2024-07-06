@@ -1,27 +1,21 @@
 import React from "react";
+import { WeatherInterface } from "../Interfaces/weatherInterfaces";
 
-interface WeatherInterface {
-    dt?: string;
-    timezone?: string;
-    name?: string;
-    country?: string;
-}
 interface ITimeAndLocation {
-    weather?: WeatherInterface
+    weather: WeatherInterface
 }
-const TimeAndLocation: React.FC<ITimeAndLocation | any> = () => {
+const TimeAndLocation: React.FC<ITimeAndLocation> = ({weather}) => {
+    console.log(weather);console.log('from the component');
     return (
         <div>
             <div className="flex items-center justify-center my-6">
                 <p className="text-white text-xl font-extralight">
-                    Thursday 31 may, 2024 | Local time: 12:45 pm
-                    {/* {formatToLocalTime(dt, timezone)} */}
+                    {weather.formatedLocalTime}
                 </p>
             </div>
 
             <div className="flex items-center justify-center my-3">
-                {/* <p className="text-white text-3xl font-medium">{`${name}, ${country}`}</p> */}
-                Berlin, DE
+                <p className="text-white text-3xl font-medium">{`${weather.name}, ${weather.country}`}</p>
             </div>
         </div>
     );
