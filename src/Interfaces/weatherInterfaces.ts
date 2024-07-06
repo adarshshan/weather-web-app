@@ -1,4 +1,4 @@
-interface DailyAnHourlyInterface {
+export interface DailyAnHourlyInterface {
     title: string;
     temp: number;
     icon: string;

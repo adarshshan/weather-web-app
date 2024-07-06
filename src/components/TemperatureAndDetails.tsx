@@ -3,11 +3,9 @@ import { CiTempHigh } from "react-icons/ci";
 import { FaRegFaceSadTear, FaWind } from "react-icons/fa6";
 import { IoSunnySharp } from "react-icons/io5";
 import { TbSunset } from "react-icons/tb";
-import { WeatherInterface } from '../Interfaces/weatherInterfaces';
+import { ITemperatureAndDetails } from '../Interfaces/pageInterfaces';
 
-interface ITemperatureAndDetails {
-    weather: WeatherInterface;
-}
+
 const TemperatureAndDetails: React.FC<ITemperatureAndDetails> = ({ weather }) => {
     return (
         <div>

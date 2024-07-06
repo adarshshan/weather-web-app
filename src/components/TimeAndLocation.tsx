@@ -1,11 +1,9 @@
 import React from "react";
-import { WeatherInterface } from "../Interfaces/weatherInterfaces";
+import { ITimeAndLocation } from "../Interfaces/pageInterfaces";
 
-interface ITimeAndLocation {
-    weather: WeatherInterface
-}
-const TimeAndLocation: React.FC<ITimeAndLocation> = ({weather}) => {
-    console.log(weather);console.log('from the component');
+
+const TimeAndLocation: React.FC<ITimeAndLocation> = ({ weather }) => {
+    console.log(weather); console.log('from the component');
     return (
         <div>
             <div className="flex items-center justify-center my-6">

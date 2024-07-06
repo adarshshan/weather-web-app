@@ -1,8 +1,7 @@
 import React from "react";
+import { ITopButtons } from "../Interfaces/pageInterfaces";
 
-interface ITopButtons {
-    setQuery: React.Dispatch<React.SetStateAction<any>>;
-}
+
 const TopButtons: React.FC<ITopButtons> = ({ setQuery }) => {
     const cities = [
         {

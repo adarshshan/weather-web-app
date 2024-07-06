@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import { IoIosSearch } from "react-icons/io";
 import { IoLocation } from "react-icons/io5";
+import { IInputs } from '../Interfaces/pageInterfaces';
 
-interface IInputs {
-    setUnits: React.Dispatch<React.SetStateAction<string>>;
-    setQuery: React.Dispatch<React.SetStateAction<any>>;
 
-}
 const Inputs: React.FC<IInputs> = ({ setUnits, setQuery }) => {
     const [city, setCity] = useState("");
     const handleUnitsChange = () => {
