@@ -6,7 +6,7 @@ import { TbSunset } from "react-icons/tb";
 import { ITemperatureAndDetails } from '../Interfaces/pageInterfaces';
 
 
-const TemperatureAndDetails: React.FC<ITemperatureAndDetails> = ({ weather }) => {
+const TemperatureAndDetails: React.FC<ITemperatureAndDetails> = ({ weather,units }) => {
     return (
         <div>
             <div className="flex items-center justify-center py-6 text-xl text-cyan-300">
@@ -30,7 +30,7 @@ const TemperatureAndDetails: React.FC<ITemperatureAndDetails> = ({ weather }) =>
                     <div className="flex font-light text-sm items-center justify-center">
                         <FaWind />
                         Wind:
-                        <span className="font-medium ml-1">{`${weather.speed.toFixed()} km/h`}</span>
+                        <span className="font-medium ml-1">{`${weather.speed.toFixed()}${units==='metric'?'km/h':'m/s'} `}</span>
                     </div>
                 </div>
             </div>

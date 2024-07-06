@@ -13,6 +13,7 @@ export interface IInputs {
 }
 export interface ITemperatureAndDetails {
     weather: WeatherInterface;
+    units: string;
 }
 export interface ITimeAndLocation {
     weather: WeatherInterface

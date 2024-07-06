@@ -31,7 +31,7 @@ const TopButtons: React.FC<ITopButtons> = ({ setQuery }) => {
             {cities.map((city) => (
                 <button
                     key={city.id}
-                    className="text-white text-lg font-medium"
+                    className="text-white text-lg font-medium hover:text-green-900 hover:text-xl"
                     onClick={() => setQuery({q:city.title})} >
                     {city.title}
                 </button>
